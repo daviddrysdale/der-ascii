@@ -15,6 +15,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"encoding/pem"
 	"flag"
 	"fmt"
@@ -25,6 +26,7 @@ import (
 var inPath = flag.String("i", "", "input file to use (defaults to stdin)")
 var outPath = flag.String("o", "", "output file to use (defaults to stdout)")
 var pemType = flag.String("pem", "", "if provided, format the output as a PEM block with this type")
+var hexOutput = flag.Bool("hex", false, "if provided, format the output as hex data")
 
 func main() {
 	flag.Parse()
@@ -63,6 +65,8 @@ func main() {
 			Type:  *pemType,
 			Bytes: outBytes,
 		})
+	} else if *hexOutput {
+		outBytes = []byte(hex.EncodeToString(outBytes) + "\n")
 	}
 
 	outFile := os.Stdout
